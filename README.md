@@ -53,7 +53,7 @@ Add to your MCP settings file:
 }
 ```
 
-## Tools (11)
+## Tools (14)
 
 | Tool | Description |
 |------|-------------|
@@ -68,8 +68,11 @@ Add to your MCP settings file:
 | `which_card_at_merchant` | Best card from your portfolio at a specific merchant. Auto-detects spending category (e.g. Starbucks → dining) and ranks by reward value |
 | `check_merchant_benefits` | Check if any cards have credits at a merchant (e.g. Saks → Amex Platinum $100 credit). Includes earning recommendation |
 | `get_card_benefits` | All credits/benefits for a card with value, frequency, schedule, and conditions |
+| `get_card_terms` | Schumer Box data — purchase APR, penalty APR, late fees, cash advance fees, promotional APR, grace period |
+| `get_card_changes` | Audit log of card data changes (fee updates, benefit changes) with date filtering |
+| `get_program_trends` | Points program valuation history — CPP and transfer partner ratio changes over time |
 
-## Prompts (4)
+## Prompts (5)
 
 Pre-built conversation starters that guide the AI through structured workflows:
 
@@ -79,6 +82,7 @@ Pre-built conversation starters that guide the AI through structured workflows:
 | `which-card` | Find the best card for a specific purchase | `card_names`, `category`, `amount` (optional) |
 | `new-card-finder` | Search for a new card matching your criteria | `spending_focus`, `annual_fee_limit` (optional), `credit_score` (optional) |
 | `renewal-check` | Walk through a card renewal decision step by step | `card_name`, `annual_fee` (optional) |
+| `card-risk-assessment` | Analyze a card's risk profile — APR exposure, penalty triggers, fee traps | `card_name`, `issuer` (optional) |
 
 ## Benefit Selections
 
