@@ -57,20 +57,105 @@ Add to your MCP settings file:
 
 | Tool | Description |
 |------|-------------|
-| `search_credit_cards` | Natural language search across 100+ US credit cards |
-| `compare_cards` | Side-by-side comparison of 2-3 cards with fees, rewards, net value, and break-even (<100ms) |
+| `search_credit_cards` | Natural language search across 100+ US credit cards. Optional filters: `card_type`, `issuer`, `max_annual_fee`, `credit_tier` |
+| `compare_cards` | Side-by-side comparison of 2-3 cards with fees, rewards, net value, and break-even. Optional: `credit_tier`, `primary_goal`, `issuer_preferences` (<100ms) |
 | `get_card_details` | Full details for a specific card (fees, rewards, benefits) |
 | `calculate_card_value` | Annual fee break-even analysis with first-year and ongoing value |
-| `optimize_portfolio` | Portfolio health score, per-card KEEP/OPTIMIZE/CANCEL verdicts. Accepts optional `point_balances` and `benefit_selections` (<100ms) |
-| `recommend_card_for_category` | Best card to use for a specific spending category, ranked by reward value (<100ms) |
-| `check_card_renewal` | Should you renew this card? Verdict + downgrade/replacement options. Accepts optional `benefit_selections` |
+| `optimize_portfolio` | Portfolio health score, per-card KEEP/OPTIMIZE/CANCEL verdicts. Optional: `point_balances`, `benefit_selections`, `credit_tier`, `primary_goal`, `issuer_preferences`, `analysis_type`, `cancel_threshold`, `keep_threshold` (<100ms) |
+| `recommend_card_for_category` | Best card to use for a specific spending category, ranked by reward value. Optional: `spending`, `credit_tier`, `primary_goal`, `issuer_preferences` (<100ms) |
+| `check_card_renewal` | Should you renew this card? Verdict + downgrade/replacement options. Optional: `benefit_selections`, `acquired_date`, `credit_tier`, `primary_goal`, `renewal_cancel_threshold`, `renewal_keep_threshold` |
 | `create_mcp_session` | Session tracking for multi-query conversations |
 | `which_card_at_merchant` | Best card from your portfolio at a specific merchant. Auto-detects spending category (e.g. Starbucks → dining) and ranks by reward value |
 | `check_merchant_benefits` | Check if any cards have credits at a merchant (e.g. Saks → Amex Platinum $100 credit). Includes earning recommendation |
 | `get_card_benefits` | All credits/benefits for a card with value, frequency, schedule, and conditions |
 | `get_card_terms` | Schumer Box data — purchase APR, penalty APR, late fees, cash advance fees, promotional APR, grace period |
-| `get_card_changes` | Audit log of card data changes (fee updates, benefit changes) with date filtering |
+| `get_card_changes` | Audit log of card data changes (fee updates, benefit changes) with date filtering. Optional: `field` filter |
 | `get_program_trends` | Points program valuation history — CPP and transfer partner ratio changes over time |
+
+## Personalization Parameters
+
+Several tools accept optional parameters that improve result relevance. All are optional — when omitted, the server uses sensible defaults (e.g., national average spending, no issuer bias).
+
+### `credit_tier`
+
+Credit score range that affects card eligibility and approval likelihood.
+
+| Value | Meaning |
+|-------|---------|
+| `"excellent"` | 750+ |
+| `"good"` | 700-749 |
+| `"fair"` | 650-699 |
+| `"poor"` | Below 650 |
+
+**Used by:** `search_credit_cards`, `compare_cards`, `optimize_portfolio`, `recommend_card_for_category`, `check_card_renewal`
+
+### `primary_goal`
+
+The user's main objective for their credit card strategy.
+
+| Value | Meaning |
+|-------|---------|
+| `"maximize_rewards"` | Get the most points/cashback from everyday spending |
+| `"minimize_fees"` | Keep annual fees low while maintaining value |
+| `"build_credit"` | Establish or improve credit score |
+| `"travel_perks"` | Prioritize lounge access, travel credits, and transfer partners |
+| `"simplicity"` | Prefer fewer cards with straightforward reward structures |
+
+**Used by:** `compare_cards`, `optimize_portfolio`, `recommend_card_for_category`, `check_card_renewal`
+
+### `issuer_preferences`
+
+A list of issuer preference objects that express affinity or aversion toward specific card issuers. Each entry has an `issuer` name and a `weight` between -1.0 (strong aversion) and 1.0 (strong preference).
+
+```json
+[
+  {"issuer": "Chase", "weight": 0.8},
+  {"issuer": "American Express", "weight": 0.5},
+  {"issuer": "Capital One", "weight": -0.5}
+]
+```
+
+**Used by:** `compare_cards`, `optimize_portfolio`, `recommend_card_for_category`
+
+### `spending`
+
+A dictionary of monthly spending amounts by category, used to calculate personalized reward values instead of national averages.
+
+```json
+{"dining": 500, "groceries": 800, "travel": 300, "gas": 150, "general": 2000}
+```
+
+**Used by:** `compare_cards`, `optimize_portfolio`, `recommend_card_for_category`, `check_card_renewal`, `calculate_card_value`
+
+### `cancel_threshold` / `keep_threshold`
+
+Override the default net-value thresholds (in dollars) for KEEP/OPTIMIZE/CANCEL verdicts.
+
+- `cancel_threshold` — Cards below this → CANCEL (default: -50)
+- `keep_threshold` — Cards above this → KEEP (default: 50)
+
+**Used by:** `optimize_portfolio`
+
+### `renewal_cancel_threshold` / `renewal_keep_threshold`
+
+Same concept applied to a single card's renewal decision.
+
+**Used by:** `check_card_renewal`
+
+### `acquired_date`
+
+Date the user acquired the card (`YYYY-MM-DD`). Informs tenure-based renewal analysis.
+
+**Used by:** `check_card_renewal`
+
+## Response Metadata
+
+Calculation tools include metadata fields in responses:
+
+- **`spending_source`** — `"user_provided"` or `"national_averages"`. Indicates whether calculations used user-supplied spending or BLS national averages.
+- **`data_source`** — Indicates where card data was sourced (e.g., `"koko_db"`).
+- **`rewards_by_category`** — Per-category reward breakdown included in compare, portfolio, and value tools.
+- **`points_program_key`** / **`portal_cpp`** — Points program identifier and portal cents-per-point valuation, included on all card data.
 
 ## Prompts (5)
 
