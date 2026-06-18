@@ -204,6 +204,43 @@ This gives accurate net-value calculations instead of the default 50% utilizatio
 **"What benefits does my Amex Platinum have?"**
 > Show me all the credits and benefits on my Amex Platinum card — how much is each worth?
 
+## Screenshots
+
+Screenshots captured from Claude using the KoKo Finance MCP server.
+
+### 1. Search for Credit Cards
+
+> "Find me the best travel credit cards under $300 annual fee"
+
+![Search travel cards](screenshots/01-search-travel-cards.png)
+
+### 2. Compare Cards Side by Side
+
+> "Compare Chase Sapphire Reserve and Amex Gold"
+
+![Compare cards — part 1](screenshots/02-compare-cards-part1.png)
+![Compare cards — part 2](screenshots/02-compare-cards-part2.png)
+
+### 3. Portfolio Review
+
+> "Analyze my portfolio: Chase Sapphire Reserve, Amex Gold, Citi Double Cash"
+
+![Portfolio review — part 1](screenshots/03-portfolio-review-part1.png)
+![Portfolio review — part 2](screenshots/03-portfolio-review-part2.png)
+
+### 4. Which Card at a Merchant
+
+> "Which card should I use at Starbucks?"
+
+![Which card at merchant](screenshots/04-which-card-at-merchant.png)
+
+### 5. Card Benefits Breakdown
+
+> "Show me all the credits and benefits on my Amex Platinum"
+
+![Card benefits — part 1](screenshots/05-card-benefits-part1.png)
+![Card benefits — part 2](screenshots/05-card-benefits-part2.png)
+
 ## Links
 
 - [KoKo Finance](https://kokofinance.net) — Main site
