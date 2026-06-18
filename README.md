@@ -214,6 +214,18 @@ This gives accurate net-value calculations instead of the default 50% utilizatio
 
 - **[Claude Code Plugin](https://github.com/KokoFinance/koko-credit-card-plugin)** — Adds the MCP server connection plus an Agent Skill that teaches Claude structured credit card workflows
 
+## Privacy Policy
+
+KoKo Finance collects minimal data required to operate the MCP server:
+
+- **Authentication data**: Google OAuth profile (name, email) when you sign in. No sign-in is required for free-tier usage.
+- **Usage logs**: Tool name, parameters, success/failure status, and timestamp for each MCP tool call. Used for rate limiting and service improvement.
+- **No third-party sharing**: We do not sell or share personal data with third parties.
+- **Data retention**: Usage logs are retained for service operation. You can request deletion by contacting us.
+- **Contact**: [privacy@kokofinance.net](mailto:privacy@kokofinance.net)
+
+Full privacy policy: [https://kokofinance.net/privacy.html](https://kokofinance.net/privacy.html)
+
 ## License
 
 MIT
