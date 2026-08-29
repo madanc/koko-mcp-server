@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "koko-mcp-server",
+  "version": "1.0.0",
+  "description": "Hosted MCP server for AI-powered credit card advice. Search 100+ US credit cards, compare options, analyze portfolio health, and get personalized recommendations via the Model Context Protocol.",
+  "author": {
+    "name": "KoKo Finance",
+    "url": "https://kokofinance.net"
+  },
+  "homepage": "https://kokofinance.net/developers.html",
+  "repository": "https://github.com/madanc/koko-mcp-server",
+  "license": "MIT",
+  "keywords": ["credit-cards", "finance", "mcp", "rewards"]
+}
