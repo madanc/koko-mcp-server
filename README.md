@@ -105,13 +105,13 @@ The user's main objective for their credit card strategy.
 
 ### `issuer_preferences`
 
-A list of issuer preference objects that express affinity or aversion toward specific card issuers. Each entry has an `issuer` name and a `weight` between -1.0 (strong aversion) and 1.0 (strong preference).
+A list of issuer preference objects that express affinity or aversion toward specific card issuers. Each entry has an `issuer` name and a `weight` that multiplies the card's ranking score — `1.0` is neutral (the default for any issuer not listed), values above `1.0` boost, values below `1.0` de-boost. Valid range is `0.1` to `3.0`.
 
 ```json
 [
-  {"issuer": "Chase", "weight": 0.8},
-  {"issuer": "American Express", "weight": 0.5},
-  {"issuer": "Capital One", "weight": -0.5}
+  {"issuer": "Chase", "weight": 1.5},
+  {"issuer": "American Express", "weight": 1.2},
+  {"issuer": "Capital One", "weight": 0.3}
 ]
 ```
 
@@ -131,8 +131,8 @@ A dictionary of monthly spending amounts by category, used to calculate personal
 
 Override the default net-value thresholds (in dollars) for KEEP/OPTIMIZE/CANCEL verdicts.
 
-- `cancel_threshold` — Cards below this → CANCEL (default: -50)
-- `keep_threshold` — Cards above this → KEEP (default: 50)
+- `cancel_threshold` — Cards below this → CANCEL (default: -200)
+- `keep_threshold` — Cards above this → KEEP (default: 100)
 
 **Used by:** `optimize_portfolio`
 

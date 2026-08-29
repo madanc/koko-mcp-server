@@ -17,8 +17,8 @@ KoKo Finance MCP server is distributed through multiple channels:
 ### Server Details
 - **URL**: `https://kokofinance.net/mcp/`
 - **Transport**: Streamable HTTP (FastMCP with Server-Sent Events)
-- **Tools**: 7 (search, compare, details, calculate value, optimize portfolio, recommend, session)
-- **Prompts**: 3 (portfolio-review, which-card, new-card-finder)
+- **Tools**: 14 (search, compare, details, calculate value, optimize portfolio, recommend, renewal check, session, which-card-at-merchant, merchant benefits, card benefits, card terms, card changes, program trends)
+- **Prompts**: 5 (portfolio-review, which-card, new-card-finder, renewal-check, card-risk-assessment)
 - **Backend**: FastAPI Python, deployed on Google Cloud Run
 
 ### Source Code Location
@@ -32,7 +32,7 @@ KoKo Finance MCP server is distributed through multiple channels:
 
 ### Repo 1: koko-mcp-server (This Repo)
 **Purpose**: MCP server connector for any MCP client
-**URL**: https://github.com/madanc/koko-mcp-server
+**URL**: https://github.com/KokoFinance/koko-mcp-server
 **Audience**: Claude Desktop, Cursor, Cline, Windsurf users
 
 **Contents**:
@@ -48,7 +48,7 @@ KoKo Finance MCP server is distributed through multiple channels:
 
 ### Repo 2: koko-credit-card-plugin
 **Purpose**: Claude Code plugin with Agent Skill
-**URL**: https://github.com/madanc/koko-credit-card-plugin
+**URL**: https://github.com/KokoFinance/koko-credit-card-plugin
 **Audience**: Claude Code users only
 
 **Contents**:
@@ -120,23 +120,38 @@ curl "https://registry.modelcontextprotocol.io/v0/servers?search=net.kokofinance
 ## 4. Anthropic Submissions
 
 ### Connectors Directory
-**Submitted**: February 2026
-**Endpoint**: `https://kokofinance.net/mcp/`
+**Submitted**: 2026-08-14
+**Endpoint**: `https://kokofinance.net/mcp/` (streamable HTTP)
 **Form Data**:
 - **Resources**: None
-- **Prompts**: portfolio-review, which-card, new-card-finder
-- **Tools**: 7 (full list submitted)
+- **Prompts**: portfolio-review, which-card, new-card-finder, renewal-check, card-risk-assessment
+- **Tools**: 14 (full list submitted)
+- **Auth**: OAuth 2.0 + Dynamic Client Registration
+- **Categories**: Financial Services, Commerce and Shopping, Data & Analytics
+- **Reviewer test account**: `kokofinance.mcpreview@gmail.com`
 
-**Status**: Pending review
+**Status**: Awaiting Anthropic review (no published turnaround timeline)
+
+### OpenAI MCP Directory
+**Submitted**: 2026-08-17
+**Auth**: Mixed (OAuth + API key), US only, English only
+**Domain verification**: `/.well-known/openai-apps-challenge`
+
+**Status**: Awaiting review
 
 ### Claude Code Plugin Directory
 **Submitted**: February 2026
-**Repo**: https://github.com/madanc/koko-credit-card-plugin
+**Repo**: https://github.com/KokoFinance/koko-credit-card-plugin
 **Form URL**: https://clau.de/plugin-directory-submission
 **Skill Name**: `credit-card-advisor`
 **Platforms**: Both Claude Code and Claude Work
 
 **Status**: Pending review
+
+### Confirmed working (2026-08-17)
+- Claude.ai: Google OAuth flow → connected → tools callable
+- Claude Desktop: Google OAuth flow → connected → tools callable
+- OpenAI: API key auth (`Bearer koko_...`) → connected → tools callable
 
 ---
 
@@ -145,11 +160,12 @@ curl "https://registry.modelcontextprotocol.io/v0/servers?search=net.kokofinance
 ### Completed
 | Directory | Status | Details |
 |-----------|--------|---------|
-| Official MCP Registry | ✅ Published | `net.kokofinance/koko-finance` v1.0.0 |
+| Official MCP Registry | ✅ Published | `net.kokofinance/koko-finance` — needs republish, see §3 |
 
 ### Pending/Next Steps
 | Directory | Submission Method | Repo to Submit |
 |-----------|------------------|----------------|
+| [Cursor Directory](https://cursor.directory/plugins/new) | Auto-detect from GitHub (sign in required) | koko-mcp-server + koko-credit-card-plugin (separate listings) |
 | [mcp.so](https://github.com/chatmcp/mcp-directory/issues/1) | GitHub issue | koko-mcp-server |
 | [awesome-mcp-servers (punkpeye)](https://github.com/punkpeye/awesome-mcp-servers) | PR under Finance category | koko-mcp-server |
 | [awesome-mcp-servers (wong2)](https://github.com/wong2/awesome-mcp-servers) | PR | koko-mcp-server |
@@ -175,6 +191,14 @@ Added to `v3_mvp/backend/mcp_server.py` (lines 988-1113):
 ### Prompt 3: new-card-finder
 **Parameters**: `spending_focus` (required), `annual_fee_limit` (optional), `credit_score` (optional)
 **Use Case**: Search for new card matching criteria
+
+### Prompt 4: renewal-check
+**Parameters**: `card_name` (required), `annual_fee` (optional)
+**Use Case**: Walk through a card renewal decision step by step
+
+### Prompt 5: card-risk-assessment
+**Parameters**: `card_name` (required), `issuer` (optional)
+**Use Case**: Analyze a card's risk profile — APR exposure, penalty triggers, fee traps
 
 **Discovery**:
 - Available via `/mcp/prompts/list` endpoint
@@ -274,5 +298,5 @@ dig kokofinance.net TXT +short | grep MCP
 
 ---
 
-**Last Updated**: 2026-02-20
+**Last Updated**: 2026-08-29
 **Maintained By**: KoKo Finance Team
