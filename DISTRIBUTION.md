@@ -77,28 +77,35 @@ KoKo Finance MCP server is distributed through multiple channels:
 **Domain**: `kokofinance.net`
 **TXT Record** (at root domain):
 ```
-v=MCPv1; k=ed25519; p=LA+yZ26MqSjVoGM7m7huM4O1cJKdKrYtI4/8TJB9XNM=
+v=MCPv1; k=ed25519; p=UEwOFTJnF2+qiC7qKVRtUwkpdI7OxmkNnVXVelJFNVU=
 ```
 
-**Private Key**: Stored locally at `v3_mvp/koko-mcp-server/mcp-private-key.pem`
-⚠️ **Important**: Keep this private key secure. Required for publishing updates.
+**Private Key**: Stored in GCP Secret Manager (`mcp-registry-private-key`, project
+`gen-lang-client-0598754647`) — **never store this key as a local file or commit it to
+git.** The original key was accidentally committed to this repo (2026-02-19 –
+2026-09-02) and had to be rotated + purged from git history after Cursor Directory's
+security scan flagged it; see `docs/` handoff notes in the main repo for the incident
+writeup.
 
 ### Publishing Process
 
 **Prerequisites**:
 - `mcp-publisher` CLI installed (`brew install mcp-publisher`)
 - DNS TXT record in place at `kokofinance.net`
-- Private key file (`mcp-private-key.pem`)
+- Access to the `mcp-registry-private-key` secret in GCP Secret Manager
 
 **Steps**:
 ```bash
 cd v3_mvp/koko-mcp-server
 
 # 1. Update version in server.json (follow semver)
-# Edit server.json, increment "version": "1.0.0" → "1.0.1"
+# Edit server.json, increment "version": "1.1.0" → "1.1.1"
 
-# 2. Authenticate with DNS
-PRIVATE_KEY=$(openssl pkey -in mcp-private-key.pem -text -noout | grep -A3 "priv:" | tail -n +2 | tr -d ' :\n')
+# 2. Pull the key from Secret Manager and authenticate (never written to disk as a file)
+PRIVATE_KEY=$(gcloud secrets versions access latest \
+  --secret=mcp-registry-private-key \
+  --project=gen-lang-client-0598754647 \
+  | openssl pkey -text -noout | grep -A3 "priv:" | tail -n +2 | tr -d ' :\n')
 mcp-publisher login dns --domain kokofinance.net --private-key $PRIVATE_KEY
 
 # 3. Publish
