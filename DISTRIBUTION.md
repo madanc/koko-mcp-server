@@ -147,13 +147,30 @@ curl "https://registry.modelcontextprotocol.io/v0/servers?search=net.kokofinance
 **Status**: Awaiting review
 
 ### Claude Code Plugin Directory
-**Submitted**: February 2026
+**First submitted**: February 2026, from an individual (non-org) Claude account.
 **Repo**: https://github.com/KokoFinance/koko-credit-card-plugin
-**Form URL**: https://clau.de/plugin-directory-submission
 **Skill Name**: `credit-card-advisor`
-**Platforms**: Both Claude Code and Claude Work
 
-**Status**: Pending review
+**Status (checked 2026-09-04)**: Live in the community marketplace
+(`anthropics/claude-plugins-community`) as `koko-credit-card-plugin`, but **pinned to
+commit `401129f` (June 2026)** — 10 commits stale. Root cause found: `.claude-plugin/
+plugin.json`'s `repository` field still pointed at the old `madanc/` personal repo, and
+`version` had never left `1.0.0` since the initial release, even though a sibling
+`plugin.json` (Cursor's Open Plugins manifest at repo root) got its repository field
+fixed to the `KokoFinance` org back in commit `bcad164`. Per Anthropic's current docs
+(`code.claude.com/docs/en/plugins`), the marketplace pin only auto-advances on version
+bumps, which explains the staleness. Fixed both fields in commit `2b1bb79`
+(repository → `KokoFinance` org, version → `1.1.0`), validated with `claude plugin
+validate . --strict` (passed), pushed to `origin/main`.
+
+The Feb 2026 submission also doesn't show up under the KoKo Finance org's own
+directory-submissions page (`claude.ai/admin-settings/directory/submissions`) — it was
+made from an individual account, not this org, so it's untracked here. Anthropic's
+submission form now requires a Team/Enterprise org (or the Console form at
+`platform.claude.com/plugins/submit` for individual authors). **Next step**: resubmit
+from the org via **claude.ai → Org Settings → Directory → Your plugins → Submit a
+plugin** (manual step, needs the user's own authenticated session) — this both gets
+the plugin tracked under the org and should pick up the corrected manifest.
 
 ### Confirmed working (2026-08-17)
 - Claude.ai: Google OAuth flow → connected → tools callable
