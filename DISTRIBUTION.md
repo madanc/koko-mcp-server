@@ -148,29 +148,55 @@ curl "https://registry.modelcontextprotocol.io/v0/servers?search=net.kokofinance
 
 ### Claude Code Plugin Directory
 **First submitted**: February 2026, from an individual (non-org) Claude account.
+**Resubmitted**: 2026-09-05, from the KoKo Finance org's directory-submissions page
+(`claude.ai → Org Settings → Directory → Your plugins → Submit a plugin`).
 **Repo**: https://github.com/KokoFinance/koko-credit-card-plugin
+**Plugin name**: `koko-credit-cards` (kept consistent with the live Cursor Directory
+listing rather than renaming — see below)
 **Skill Name**: `credit-card-advisor`
+**Version**: `1.1.0`
+**Platforms**: Claude Code + Claude Cowork (both checked in the submission form;
+Cowork's plugin system is built around MCP connectors + skills, which is exactly what
+this plugin ships — no Code-only components like hooks/agents/LSP — so no compatibility
+gap for either surface)
+**License**: MIT
+**Example use cases submitted**: the 5 proven prompts also used for the OpenAI test
+cases (portfolio review, which-card-to-use, new card finder, renewal decision, merchant
+advice) — see `docs/openai_plugin_submission.md` for the exact wording.
 
-**Status (checked 2026-09-04)**: Live in the community marketplace
+**Status**: Submitted 2026-09-05, awaiting review. No published turnaround timeline.
+
+**History — why this needed a resubmission**: found live-but-stale 2026-09-04. The Feb
+2026 submission *was* approved and synced to the community marketplace
 (`anthropics/claude-plugins-community`) as `koko-credit-card-plugin`, but **pinned to
-commit `401129f` (June 2026)** — 10 commits stale. Root cause found: `.claude-plugin/
+commit `401129f` (June 2026)** — 10 commits stale at the time. Root cause: `.claude-plugin/
 plugin.json`'s `repository` field still pointed at the old `madanc/` personal repo, and
 `version` had never left `1.0.0` since the initial release, even though a sibling
 `plugin.json` (Cursor's Open Plugins manifest at repo root) got its repository field
-fixed to the `KokoFinance` org back in commit `bcad164`. Per Anthropic's current docs
+fixed to the `KokoFinance` org back in commit `bcad164`. Per Anthropic's docs
 (`code.claude.com/docs/en/plugins`), the marketplace pin only auto-advances on version
-bumps, which explains the staleness. Fixed both fields in commit `2b1bb79`
-(repository → `KokoFinance` org, version → `1.1.0`), validated with `claude plugin
-validate . --strict` (passed), pushed to `origin/main`.
+bumps, which explains the staleness. Fixed both fields (repository → `KokoFinance` org,
+version → `1.1.0`) in commit `2b1bb79`, validated with `claude plugin validate .
+--strict` (passed). Also fixed the description across both `plugin.json` manifests and
+the README (commit `ac41e15`) to match the new submission copy: "Credit card
+intelligence for Claude. Find and compare cards, optimize rewards. Covers break-even
+calculations, renewal questions, and merchant intelligence."
 
-The Feb 2026 submission also doesn't show up under the KoKo Finance org's own
+The Feb 2026 submission also didn't show up under the KoKo Finance org's own
 directory-submissions page (`claude.ai/admin-settings/directory/submissions`) — it was
-made from an individual account, not this org, so it's untracked here. Anthropic's
-submission form now requires a Team/Enterprise org (or the Console form at
-`platform.claude.com/plugins/submit` for individual authors). **Next step**: resubmit
-from the org via **claude.ai → Org Settings → Directory → Your plugins → Submit a
-plugin** (manual step, needs the user's own authenticated session) — this both gets
-the plugin tracked under the org and should pick up the corrected manifest.
+made from an individual account, not this org, so it was untracked there. Anthropic's
+current submission form requires a Team/Enterprise org for the `claude.ai` path (or the
+Console form at `platform.claude.com/plugins/submit` for individual authors) — this
+resubmission was made from the org, so it should now show up on that page with a
+trackable status, unlike last time.
+
+**Considered and rejected**: renaming the plugin to `koko-credit-card-assistant` for a
+clearer name. Anthropic's docs confirm a marketplace listing name can differ from
+`plugin.json`'s internal `name` (whatever the marketplace lists it under is what
+`/plugin install` actually uses), so this was technically possible without touching the
+manifest. Decided against it anyway — user's call was that keeping one name consistent
+with the already-live, ranked-#1 Cursor Directory listing (same `plugin.json`, shared
+`name` field) was worth more than a nicer name.
 
 ### Confirmed working (2026-08-17)
 - Claude.ai: Google OAuth flow → connected → tools callable
